@@ -16,7 +16,7 @@ export default function Register() {
     <div className='d-flex justify-content-center align-items-center h-100 pt-5 mt-5' style={{height:"100vh"}} >
 
     <MDBContainer className="p-3 my-5 d-flex flex-column h-50" style={{width:"500px", maxWidth:"95%"}}>
-        <h3 className='text-center'>Login to PassGen</h3>
+        <h3 className='text-center'>Register to PassGen</h3>
         <span className='mt-5'></span>
 
       <MDBInput wrapperClass='mb-4' size='lg' value={name} onChange={(e)=>setName(e.target.value)} label='Email address' id='form1' type='email'/>
