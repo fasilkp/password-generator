@@ -1,4 +1,4 @@
-import React, {  useState } from 'react';
+import React, {  useEffect, useState } from 'react';
 import {
     MDBBtn,
     MDBModal,
@@ -13,21 +13,34 @@ import {
     MDBRange,
     MDBSwitch,
 } from 'mdb-react-ui-kit';
+import generatePassword from '../helper/generatePassword';
 
 export default function AddPasswordModal({ open, setOpen }) {
     const toggleShow = () => setOpen(!open);
     const [password, setPassword]= useState('')
+    const [appName, setAppName]= useState("")
+    const [refresh, setRefresh] = useState(true)
     const [option, setoption]= useState({
         upperCase:false,
         numbers:false,
         symbols:false
     })
-    const [length, setLength]= useState(8)
+    const [length, setLength]= useState(15)
+    useEffect(()=>{
+        try{
+            let newPassword= generatePassword(option, length)
+            setPassword(newPassword)
+
+        }catch(err){
+            console.log(err)
+        }
+    },[option, open, length, refresh])
+    const handleLengthChange=((e)=>{
+        setLength(e.target.value)
+    })
 
     return (
         <>
-            {/* <MDBBtn onClick={toggleShow}>Vertically centered modal</MDBBtn> */}
-
             <MDBModal tabIndex='-1' show={open} setShow={setOpen}>
                 <MDBModalDialog centered>
                     <MDBModalContent>
@@ -37,19 +50,25 @@ export default function AddPasswordModal({ open, setOpen }) {
                         </MDBModalHeader>
                         <MDBModalBody>
                             <MDBRow className='ps-2 pe-2'>
+                                <MDBInput label='App name' value={appName} onChange={(e)=>setAppName(e.target.value)} id='form1' type='text' size='lg' />
+                            </MDBRow>
+                            <MDBRow className='ps-2 pe-2 mt-3'>
                                 <MDBInput label='Generated password' value={password} onChange={(e)=>setPassword(e.target.value)} id='form1' type='text' size='lg' />
+                            </MDBRow>
+                            <MDBRow className='ps-2 pe-2 mt-3'>
+                                <MDBBtn color='danger' outline className='w-95'>Copy Password</MDBBtn>
                             </MDBRow>
                             <MDBRow className='mt-4'>
                                 <div className='d-flex justify-content-between flex-row align-items-center'>
                                     <span>Length</span>
-                                    <div class="badge badge-primary p-3 rounded-5">{length}</div>
+                                    <div className="badge badge-primary p-3 rounded-5">{length}</div>
                                 </div>
                                 <MDBRange
                                     defaultValue={length}
                                     min='5'
                                     max='64'
                                     step='1'
-                                    onChange={(e)=>setLength(e.target.value)}
+                                    onChange={handleLengthChange}
                                     value={length}
                                     id='customRange3'
                                     className='mt-2'
@@ -73,6 +92,11 @@ export default function AddPasswordModal({ open, setOpen }) {
                                     <label htmlFor='sympolCheck'>Include Symbols</label>
                                     <MDBSwitch checked={option.symbols} color='danger' onChange={(e)=>setoption({...option, symbols:e.target.checked})}/>
                                 </div>
+                            </MDBRow>
+                            <MDBRow className='mt-3 ps-2 pe-2'>
+                            <MDBBtn color='danger' className='w-100' onClick={()=>setRefresh(!refresh)} rounded>
+                                Generate new
+                            </MDBBtn>
                             </MDBRow>
                         </MDBModalBody>
                         <MDBModalFooter>
