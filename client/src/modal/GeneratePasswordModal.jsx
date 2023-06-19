@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
     MDBBtn,
     MDBModal,
@@ -10,7 +10,6 @@ import {
     MDBModalFooter,
     MDBRow,
     MDBInput,
-    MDBCheckbox,
     MDBRange,
     MDBSwitch,
 } from 'mdb-react-ui-kit';
@@ -27,7 +26,6 @@ export default function GeneratePasswordModal({ open, setOpen }) {
 
     return (
         <>
-            {/* <MDBBtn onClick={toggleShow}>Vertically centered modal</MDBBtn> */}
 
             <MDBModal tabIndex='-1' show={open} setShow={setOpen}>
                 <MDBModalDialog centered>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import {
     MDBBtn,
     MDBModal,
@@ -10,7 +10,6 @@ import {
     MDBModalFooter,
     MDBRow,
     MDBInput,
-    MDBCheckbox,
     MDBRange,
     MDBSwitch,
 } from 'mdb-react-ui-kit';
