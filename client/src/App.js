@@ -29,7 +29,7 @@ export default function App() {
         <Routes>
           {user.login && (
             <>
-              <Route path="/" element={<Home user={user} setRefresh={setRefresh} />} />
+              <Route path="/" element={<Home user={user} refresh={refresh} setRefresh={setRefresh} />} />
               <Route path="/login" element={<Navigate to="/" />}/>
               <Route path="/register"element={<Navigate to="/" />}
               />

@@ -24,18 +24,8 @@ export async function addPassword(req, res){
 
 export async function getPasswords(req, res){
     try{
-        if(!appName  || !password || !userName){
-            return res.json({err:true, message:"please input all details"})
-        }
-        let passwordExist = await passwordModel.findOne({appName});
-        if(passwordExist){
-            return res.json({err:true, message:"password already exist"})
-        }
-        const encyptedPassword =encrypt(password);
-        const newPassword = await passwordModel.create({appName, userName, password:encyptedPassword})
-        return res.json({err:false, message:"Success"})
-        
-
+        let passwords = await passwordModel.find({userId:req.user._id});
+        return res.json({err:false, message:"Success", passwords})
     }catch(err){
         console.log(err)
         res.json({err:true, message:"something went wrong"})

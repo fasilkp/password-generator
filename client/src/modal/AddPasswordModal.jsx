@@ -1,4 +1,4 @@
-import React, {  useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     MDBBtn,
     MDBModal,
@@ -16,37 +16,48 @@ import {
 import generatePassword from '../helper/generatePassword';
 import copyToClipboard from '../helper/copyToClipboard';
 import axios from 'axios';
+import Swal from 'sweetalert2'
 
-export default function AddPasswordModal({ open, setOpen }) {
+export default function AddPasswordModal({ open, setOpen, setRefresh }) {
     const toggleShow = () => setOpen(!open);
-    const [password, setPassword]= useState('')
-    const [appName, setAppName]= useState("")
-    const [userName, setUserName]= useState("")
-    const [refresh, setRefresh] = useState(true)
-    const [option, setoption]= useState({
-        upperCase:true,
-        numbers:true,
-        symbols:false
+    const [password, setPassword] = useState('')
+    const [appName, setAppName] = useState("")
+    const [userName, setUserName] = useState("")
+    const [pageReload, setPageReload] = useState(true)
+    const [err, setErr] = useState("")
+    const [option, setoption] = useState({
+        upperCase: true,
+        numbers: true,
+        symbols: false
     })
-    const [length, setLength]= useState(8)
-    useEffect(()=>{
-        try{
-            let newPassword= generatePassword(option, length)
+    const [length, setLength] = useState(16)
+    useEffect(() => {
+        try {
+            let newPassword = generatePassword(option, length)
             setPassword(newPassword)
 
-        }catch(err){
-            console.log(err)
+        } catch (err) {
+            setErr(data.message)
         }
-    },[option, open, length, refresh])
-    const handleLengthChange=((e)=>{
+    }, [option, open, length, pageReload])
+    const handleLengthChange = ((e) => {
         setLength(e.target.value)
     })
-    const addPassword=async()=>{
-        const {data} = await axios.post("/password/add", {appName, userName, password});
+    const addPassword = async () => {
+        const { data } = await axios.post("/password/add", { appName, userName, password });
         console.log(data)
-        if(data.err){
-            console.log(data.message)
+        if (!data.err) {
+            Swal.fire(
+                'Good job!',
+                'Password added successfully!',
+                'success'
+            )
+            setRefresh(refresh=>!refresh)
+            setOpen(false)
+        } else {
+            setErr(data.message)
         }
+
     }
 
     return (
@@ -60,16 +71,16 @@ export default function AddPasswordModal({ open, setOpen }) {
                         </MDBModalHeader>
                         <MDBModalBody>
                             <MDBRow className='ps-2 pe-2 mt-3'>
-                                <MDBInput label='Generated password' value={password} onChange={(e)=>setPassword(e.target.value)} id='form1' type='text' size='lg' />
+                                <MDBInput label='Generated password' value={password} onChange={(e) => setPassword(e.target.value)} id='form1' type='text' size='lg' />
                             </MDBRow>
                             <MDBRow className='ps-2 pe-2 mt-3'>
-                                <MDBBtn color='danger' onClick={()=>copyToClipboard(password)} outline className='w-95'>Copy Password</MDBBtn>
+                                <MDBBtn color='danger' onClick={() => copyToClipboard(password)} outline className='w-95'>Copy Password</MDBBtn>
                             </MDBRow>
                             <MDBRow className='ps-2 pe-2 mt-3'>
-                                <MDBInput label='App name' value={appName} onChange={(e)=>setAppName(e.target.value)} id='form1' type='text' size='lg' />
+                                <MDBInput label='App name' value={appName} onChange={(e) => setAppName(e.target.value)} id='form1' type='text' size='lg' />
                             </MDBRow>
                             <MDBRow className='ps-2 pe-2 mt-3'>
-                                <MDBInput label='User Name' value={userName} onChange={(e)=>setUserName(e.target.value)} id='form1' type='text' size='lg' />
+                                <MDBInput label='User Name' value={userName} onChange={(e) => setUserName(e.target.value)} id='form1' type='text' size='lg' />
                             </MDBRow>
                             <MDBRow className='mt-4'>
                                 <div className='d-flex justify-content-between flex-row align-items-center'>
@@ -91,32 +102,40 @@ export default function AddPasswordModal({ open, setOpen }) {
                             <MDBRow className='mt-3'>
                                 <div className='d-flex justify-content-between flex-row'>
                                     <label htmlFor='numberCheck'>Include Numbers</label>
-                                    <MDBSwitch checked={option.numbers} color='danger' onChange={(e)=>setoption({...option, numbers:e.target.checked})}/>
+                                    <MDBSwitch checked={option.numbers} color='danger' onChange={(e) => setoption({ ...option, numbers: e.target.checked })} />
                                 </div>
                             </MDBRow>
                             <MDBRow className='mt-3'>
                                 <div className='d-flex justify-content-between flex-row'>
                                     <label htmlFor='capCheck'>Incluse Uppercase letters</label>
-                                    <MDBSwitch checked={option.upperCase} color='danger' onChange={(e)=>setoption({...option, upperCase:e.target.checked})}/>
+                                    <MDBSwitch checked={option.upperCase} color='danger' onChange={(e) => setoption({ ...option, upperCase: e.target.checked })} />
                                 </div>
                             </MDBRow>
                             <MDBRow className='mt-3'>
                                 <div className='d-flex justify-content-between flex-row'>
                                     <label htmlFor='sympolCheck'>Include Symbols</label>
-                                    <MDBSwitch checked={option.symbols} color='danger' onChange={(e)=>setoption({...option, symbols:e.target.checked})}/>
+                                    <MDBSwitch checked={option.symbols} color='danger' onChange={(e) => setoption({ ...option, symbols: e.target.checked })} />
                                 </div>
                             </MDBRow>
+                            <MDBRow className='mt-3'>
+                                {
+                                    err &&
+                                    <div className="text-left">
+                                        <p className='text-danger'>{err}</p>
+                                    </div>
+                                }
+                            </MDBRow>
                             <MDBRow className='mt-3 ps-2 pe-2'>
-                            <MDBBtn color='danger' className='w-100' onClick={()=>setRefresh(!refresh)} rounded>
-                                Generate new
-                            </MDBBtn>
+                                <MDBBtn color='danger' className='w-100' onClick={() => setPageReload(!pageReload)} rounded>
+                                    Generate new
+                                </MDBBtn>
                             </MDBRow>
                         </MDBModalBody>
                         <MDBModalFooter>
                             <MDBBtn color='danger' outline onClick={toggleShow} rounded>
                                 Close
                             </MDBBtn>
-                            <MDBBtn color='danger' onClick={addPassword} rounded disabled={appName=="" || userName=="" || password==""}>Save</MDBBtn>
+                            <MDBBtn color='danger' onClick={addPassword} rounded disabled={appName == "" || userName == "" || password == ""}>Save</MDBBtn>
                         </MDBModalFooter>
                     </MDBModalContent>
                 </MDBModalDialog>
