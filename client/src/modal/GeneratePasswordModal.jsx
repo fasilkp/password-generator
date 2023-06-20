@@ -1,4 +1,4 @@
-import React, {  useEffect, useState } from 'react';
+import React, {  useEffect, useRef, useState } from 'react';
 import {
     MDBBtn,
     MDBModal,
@@ -14,6 +14,7 @@ import {
     MDBSwitch,
 } from 'mdb-react-ui-kit';
 import generatePassword from '../helper/generatePassword';
+import copyToClipboard from '../helper/copyToClipboard';
 
 export default function GeneratePasswordModal({ open, setOpen }) {
     const toggleShow = () => setOpen(!open);
@@ -21,11 +22,11 @@ export default function GeneratePasswordModal({ open, setOpen }) {
     const [appName, setAppName]= useState("")
     const [refresh, setRefresh] = useState(true)
     const [option, setoption]= useState({
-        upperCase:false,
-        numbers:false,
+        upperCase:true,
+        numbers:true,
         symbols:false
     })
-    const [length, setLength]= useState(15)
+    const [length, setLength]= useState(8)
     useEffect(()=>{
         try{
             let newPassword= generatePassword(option, length)
@@ -98,7 +99,7 @@ export default function GeneratePasswordModal({ open, setOpen }) {
                             <MDBBtn color='danger' outline onClick={toggleShow} rounded>
                                 Close
                             </MDBBtn>
-                            <MDBBtn color='danger' rounded>Copy to Clipboard</MDBBtn>
+                            <MDBBtn color='danger' onClick={()=>copyToClipboard(password)} rounded>Copy to Clipboard</MDBBtn>
                         </MDBModalFooter>
                     </MDBModalContent>
                 </MDBModalDialog>

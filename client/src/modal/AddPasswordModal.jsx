@@ -14,18 +14,21 @@ import {
     MDBSwitch,
 } from 'mdb-react-ui-kit';
 import generatePassword from '../helper/generatePassword';
+import copyToClipboard from '../helper/copyToClipboard';
+import axios from 'axios';
 
 export default function AddPasswordModal({ open, setOpen }) {
     const toggleShow = () => setOpen(!open);
     const [password, setPassword]= useState('')
     const [appName, setAppName]= useState("")
+    const [userName, setUserName]= useState("")
     const [refresh, setRefresh] = useState(true)
     const [option, setoption]= useState({
-        upperCase:false,
-        numbers:false,
+        upperCase:true,
+        numbers:true,
         symbols:false
     })
-    const [length, setLength]= useState(15)
+    const [length, setLength]= useState(8)
     useEffect(()=>{
         try{
             let newPassword= generatePassword(option, length)
@@ -38,6 +41,13 @@ export default function AddPasswordModal({ open, setOpen }) {
     const handleLengthChange=((e)=>{
         setLength(e.target.value)
     })
+    const addPassword=async()=>{
+        const {data} = await axios.post("/password/add", {appName, userName, password});
+        console.log(data)
+        if(data.err){
+            console.log(data.message)
+        }
+    }
 
     return (
         <>
@@ -49,14 +59,17 @@ export default function AddPasswordModal({ open, setOpen }) {
                             <MDBBtn className='btn-close' color='none' onClick={toggleShow}></MDBBtn>
                         </MDBModalHeader>
                         <MDBModalBody>
-                            <MDBRow className='ps-2 pe-2'>
-                                <MDBInput label='App name' value={appName} onChange={(e)=>setAppName(e.target.value)} id='form1' type='text' size='lg' />
-                            </MDBRow>
                             <MDBRow className='ps-2 pe-2 mt-3'>
                                 <MDBInput label='Generated password' value={password} onChange={(e)=>setPassword(e.target.value)} id='form1' type='text' size='lg' />
                             </MDBRow>
                             <MDBRow className='ps-2 pe-2 mt-3'>
-                                <MDBBtn color='danger' outline className='w-95'>Copy Password</MDBBtn>
+                                <MDBBtn color='danger' onClick={()=>copyToClipboard(password)} outline className='w-95'>Copy Password</MDBBtn>
+                            </MDBRow>
+                            <MDBRow className='ps-2 pe-2 mt-3'>
+                                <MDBInput label='App name' value={appName} onChange={(e)=>setAppName(e.target.value)} id='form1' type='text' size='lg' />
+                            </MDBRow>
+                            <MDBRow className='ps-2 pe-2 mt-3'>
+                                <MDBInput label='User Name' value={userName} onChange={(e)=>setUserName(e.target.value)} id='form1' type='text' size='lg' />
                             </MDBRow>
                             <MDBRow className='mt-4'>
                                 <div className='d-flex justify-content-between flex-row align-items-center'>
@@ -103,7 +116,7 @@ export default function AddPasswordModal({ open, setOpen }) {
                             <MDBBtn color='danger' outline onClick={toggleShow} rounded>
                                 Close
                             </MDBBtn>
-                            <MDBBtn color='danger' rounded>Save</MDBBtn>
+                            <MDBBtn color='danger' onClick={addPassword} rounded disabled={appName=="" || userName=="" || password==""}>Save</MDBBtn>
                         </MDBModalFooter>
                     </MDBModalContent>
                 </MDBModalDialog>

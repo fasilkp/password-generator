@@ -38,16 +38,15 @@ function Login({setRefresh}) {
           {/* <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='Remember me' /> */}
           {/* <a href="!#">Forgot password?</a> */}
         </div>
-
         {
           err &&
           <div className="text-left">
             <p className='text-danger'>{err}</p>
           </div>
         }
-        <MDBBtn className="mb-4" onClick={handleSubmit} size='lg'>Sign in</MDBBtn>
+        <MDBBtn className="mb-4" onClick={handleSubmit} color='danger' size='lg'>Sign in</MDBBtn>
         <div className="text-center">
-          <p>Not a member? <Link to="/register">Register</Link></p>
+          <p>Not a member? <Link to="/register" className='text-danger'>Register</Link></p>
         </div>
 
       </MDBContainer>

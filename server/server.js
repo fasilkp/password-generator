@@ -6,6 +6,7 @@ import path from 'path'
 import { checkLogin, login, logout, register } from './controllers/authController.js'
 import cookieParser from 'cookie-parser'
 import { addPassword } from './controllers/passwordController.js'
+import verifyUser from './middleware/verifyUser.js'
 const app = express()
 
 app.use(cookieParser());
@@ -29,7 +30,7 @@ app.post("/login", login)
 app.get("/login/check", checkLogin)
 app.get("/logout/", logout)
 app.post("/register", register)
-app.post("/password/add", addPassword)
+app.post("/password/add",verifyUser, addPassword)
 
 
 app.listen(4000, ()=>{

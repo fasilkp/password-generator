@@ -47,10 +47,10 @@ export default function Register({setRefresh}) {
           </div>
         }
 
-      <MDBBtn className="mb-4" size='lg' onClick={handleSubmit}>Sign Up</MDBBtn>
+      <MDBBtn className="mb-4" color='danger' size='lg' onClick={handleSubmit}>Sign Up</MDBBtn>
 
       <div className="text-center">
-        <p>Already a member? <Link to="/login">Login</Link></p>
+        <p>Already a member? <Link to="/login" className='text-danger'>Login</Link></p>
       </div>
 
     </MDBContainer>

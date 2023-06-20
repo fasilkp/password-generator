@@ -22,7 +22,6 @@ export default function App() {
       }
     })();
   }, [refresh]);
-  console.log(user)
   return (
     <>
       {/* <Home/> */}
