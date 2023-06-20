@@ -41,10 +41,9 @@ export async function login(req, res){
         if(!user){
             return res.json({err:true, message:"no user found"})
         }
-        if(bcrypt.compareSync(password, user.password)){
-            req.session.user={
-            id:user._id
-        }
+        if(!bcrypt.compareSync(password, user.password)){
+            return res.json({err:true, message:"Invalid password"})
+            
         }
         const token = jwt.sign(
             {
@@ -59,6 +58,7 @@ export async function login(req, res){
             sameSite: "none",
         }).json({err:false, message:"Success"})
     }catch(err){
+        console.log(err)
         res.json({err:true, message:"something went wrong"})
     }
 }
@@ -78,4 +78,13 @@ export const checkLogin = async (req, res) => {
         console.log(err)
         res.json({ login: false, error: err });
     }
+}
+
+export const logout = async (req, res) => {
+    res.cookie("token", "", {
+        httpOnly: true,
+        expires: new Date(0),
+        secure: true,
+        sameSite: "none",
+    }).json({ message: "logged out", error: false });
 }

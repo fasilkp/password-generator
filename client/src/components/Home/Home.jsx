@@ -17,12 +17,12 @@ import AddPasswordModal from '../../modal/AddPasswordModal'
 import GeneratePasswordModal from '../../modal/GeneratePasswordModal';
 
 
-export default function Home() {
+export default function Home({user, setRefresh}) {
     const [showAddModal, setShowAddModal]= useState(false)
     const [showGenerateModal, setShowGenerateModal]= useState(false)
     return (
         <>
-            <Header></Header>
+            <Header setRefresh={setRefresh}></Header>
             <MDBContainer className='mt-5'>
                 <MDBRow className='mt-3'>
                     <h5>Home</h5>

@@ -3,7 +3,7 @@ import express from 'express'
 import dbConnect from './dbConnect.js'
 import cors from 'cors'
 import path from 'path'
-import { checkLogin, login, register } from './controllers/authController.js'
+import { checkLogin, login, logout, register } from './controllers/authController.js'
 import cookieParser from 'cookie-parser'
 import { addPassword } from './controllers/passwordController.js'
 const app = express()
@@ -27,6 +27,7 @@ dbConnect()
 
 app.post("/login", login)
 app.get("/login/check", checkLogin)
+app.get("/logout/", logout)
 app.post("/register", register)
 app.post("/password/add", addPassword)
 

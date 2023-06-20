@@ -6,33 +6,51 @@ import {
   MDBBtn,
   MDBIcon
 }
-from 'mdb-react-ui-kit';
+  from 'mdb-react-ui-kit';
+import { Link } from 'react-router-dom'
+import axios from 'axios';
 
-function Login() {
-    const [email,setEmail]= useState("")
-    const [passsword,setPassword]= useState("")
+
+function Login({setRefresh}) {
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [err, setErr] = useState("")
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    let { data } = await axios.post("/login", { email, password });
+    if(data.err){
+      setErr(data.message)
+    }else{
+      setRefresh(refresh=>!refresh)
+    }
+  }
   return (
-    <div className='d-flex justify-content-center align-items-center h-100 pt-5 mt-5' style={{height:"100vh"}} >
+    <div className='d-flex justify-content-center align-items-center h-100 pt-5 mt-5' style={{ height: "100vh" }} >
 
-    <MDBContainer className="p-3 my-5 d-flex flex-column h-50" style={{width:"500px", maxWidth:"95%"}}>
+      <MDBContainer className="p-3 my-5 d-flex flex-column h-50" style={{ width: "500px", maxWidth: "95%" }}>
         <h3 className='text-center'>Login to PassGen</h3>
         <span className='mt-5'></span>
 
-      <MDBInput wrapperClass='mb-4' size='lg' value={email} onChange={(e)=>setEmail(e.target.value)} label='Email address' id='form1' type='email'/>
-      <MDBInput wrapperClass='mb-4' size='lg' value={passsword} onChange={(e)=>setPassword(e.target.value)} label='Password' id='form2' type='password'/>
+        <MDBInput wrapperClass='mb-4' size='lg' value={email} onChange={(e) => setEmail(e.target.value)} label='Email address' id='form1' type='email' />
+        <MDBInput wrapperClass='mb-4' size='lg' value={password} onChange={(e) => setPassword(e.target.value)} label='Password' id='form2' type='password' />
 
-      <div className="d-flex justify-content-between mb-4">
-        {/* <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='Remember me' /> */}
-        <a href="!#">Forgot password?</a>
-      </div>
+        <div className="d-flex justify-content-between mb-4">
+          {/* <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='Remember me' /> */}
+          {/* <a href="!#">Forgot password?</a> */}
+        </div>
 
-      <MDBBtn className="mb-4" size='lg'>Sign in</MDBBtn>
+        {
+          err &&
+          <div className="text-left">
+            <p className='text-danger'>{err}</p>
+          </div>
+        }
+        <MDBBtn className="mb-4" onClick={handleSubmit} size='lg'>Sign in</MDBBtn>
+        <div className="text-center">
+          <p>Not a member? <Link to="/register">Register</Link></p>
+        </div>
 
-      <div className="text-center">
-        <p>Not a member? <a href="#!">Register</a></p>
-      </div>
-
-    </MDBContainer>
+      </MDBContainer>
     </div>
 
   );

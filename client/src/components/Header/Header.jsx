@@ -12,8 +12,13 @@ import {
     MDBRow
 } from 'mdb-react-ui-kit';
 import icon from '../../images/lock.png'
+import axios from 'axios';
 
-export default function Header() {
+export default function Header({setRefresh}) {
+    const handleLogout=async()=>{
+        const {data} = await axios.get("/logout")
+        setRefresh(refresh=>!refresh)
+    }
     return (
         <>
             <MDBNavbar light bgColor='light' className='position-sticky sticky-top'>
@@ -39,7 +44,7 @@ export default function Header() {
                                         alt="" />
                                     </MDBDropdownToggle>
                                     <MDBDropdownMenu>
-                                        <MDBDropdownItem link>Logout</MDBDropdownItem>
+                                        <MDBDropdownItem link onClick={handleLogout}>Logout</MDBDropdownItem>
                                     </MDBDropdownMenu>
                                 </MDBDropdown>
                             </MDBCol>

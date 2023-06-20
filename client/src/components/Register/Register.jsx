@@ -7,19 +7,23 @@ import {
   MDBIcon
 }
 from 'mdb-react-ui-kit';
+import {Link} from 'react-router-dom'
 import axios from 'axios';
 
-export default function Register() {
+export default function Register({setRefresh}) {
     const [email,setEmail]= useState("")
+    const [err, setErr] = useState("")
     const [password,setPassword]= useState("")
     const [name,setName]= useState("")
     
     const handleSubmit=async(e)=>{
       e.preventDefault();
       let {data} = await axios.post("/register", {name, email, password});
-      console.log(data)
-      let {data:loginData} = await axios.get("/login/check");
-      console.log(loginData)
+      if(data.err){
+        setErr(data.message)
+      }else{
+        setRefresh(refresh=>!refresh)
+      }
     }
   return (
     <div className='d-flex justify-content-center align-items-center h-100 pt-5 mt-5' style={{height:"100vh"}} >
@@ -34,13 +38,19 @@ export default function Register() {
 
       <div className="d-flex justify-content-between mb-4">
         {/* <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='Remember me' /> */}
-        <a href="!#">Forgot password?</a>
+        {/* <a href="!#">Forgot password?</a> */}
       </div>
+      {
+          err &&
+          <div className="text-left">
+            <p className='text-danger'>{err}</p>
+          </div>
+        }
 
-      <MDBBtn className="mb-4" size='lg' onClick={handleSubmit}>Sign in</MDBBtn>
+      <MDBBtn className="mb-4" size='lg' onClick={handleSubmit}>Sign Up</MDBBtn>
 
       <div className="text-center">
-        <p>Not a member? <a href="#!">Register</a></p>
+        <p>Already a member? <Link to="/login">Login</Link></p>
       </div>
 
     </MDBContainer>
