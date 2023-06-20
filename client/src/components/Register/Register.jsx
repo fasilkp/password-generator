@@ -7,11 +7,20 @@ import {
   MDBIcon
 }
 from 'mdb-react-ui-kit';
+import axios from 'axios';
 
 export default function Register() {
     const [email,setEmail]= useState("")
-    const [passsword,setPassword]= useState("")
+    const [password,setPassword]= useState("")
     const [name,setName]= useState("")
+    
+    const handleSubmit=async(e)=>{
+      e.preventDefault();
+      let {data} = await axios.post("/register", {name, email, password});
+      console.log(data)
+      let {data:loginData} = await axios.get("/login/check");
+      console.log(loginData)
+    }
   return (
     <div className='d-flex justify-content-center align-items-center h-100 pt-5 mt-5' style={{height:"100vh"}} >
 
@@ -19,16 +28,16 @@ export default function Register() {
         <h3 className='text-center'>Register to PassGen</h3>
         <span className='mt-5'></span>
 
-      <MDBInput wrapperClass='mb-4' size='lg' value={name} onChange={(e)=>setName(e.target.value)} label='Email address' id='form1' type='email'/>
+      <MDBInput wrapperClass='mb-4' size='lg' value={name} onChange={(e)=>setName(e.target.value)} label='Name' id='form1' type='text'/>
       <MDBInput wrapperClass='mb-4' size='lg' value={email} onChange={(e)=>setEmail(e.target.value)} label='Email address' id='form1' type='email'/>
-      <MDBInput wrapperClass='mb-4' size='lg' value={passsword} onChange={(e)=>setPassword(e.target.value)} label='Password' id='form2' type='password'/>
+      <MDBInput wrapperClass='mb-4' size='lg' value={password} onChange={(e)=>setPassword(e.target.value)} label='Password' id='form2' type='password'/>
 
       <div className="d-flex justify-content-between mb-4">
         {/* <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='Remember me' /> */}
         <a href="!#">Forgot password?</a>
       </div>
 
-      <MDBBtn className="mb-4" size='lg'>Sign in</MDBBtn>
+      <MDBBtn className="mb-4" size='lg' onClick={handleSubmit}>Sign in</MDBBtn>
 
       <div className="text-center">
         <p>Not a member? <a href="#!">Register</a></p>

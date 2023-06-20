@@ -1,5 +1,6 @@
 import userModel from '../models/userModel.js'
 import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
 var salt = bcrypt.genSaltSync(10);
 
 export async function register(req, res){
@@ -14,12 +15,18 @@ export async function register(req, res){
         }
         const hashPassword = bcrypt.hashSync(password, salt);
         user = await userModel.create({name, email, password:hashPassword})
-        req.session.user={
-            id:user._id
-        }
-        return res.json({err:false, message:"Success"})
-        
-
+        const token = jwt.sign(
+            {
+                id: user._id
+            },
+            process.env.JWT_SECRET
+        )
+        return res.cookie("token", token, {
+            httpOnly: true,
+            secure: true,
+            maxAge: 1000 * 60 * 10,
+            sameSite: "none",
+        }).json({err:false, message:"Success"})
     }catch(err){
         res.json({err:true, message:"something went wrong"})
     }
@@ -39,24 +46,36 @@ export async function login(req, res){
             id:user._id
         }
         }
-        return res.json({err:false, message:"Success"})
+        const token = jwt.sign(
+            {
+                id: user._id
+            },
+            process.env.JWT_SECRET
+        )
+        return res.cookie("token", token, {
+            httpOnly: true,
+            secure: true,
+            maxAge: 1000 * 60 * 10,
+            sameSite: "none",
+        }).json({err:false, message:"Success"})
     }catch(err){
         res.json({err:true, message:"something went wrong"})
     }
 }
 
-export async function checkLogin(req, res){
-    try{
-        if(!req.session.user){
-            return res.json({login:false, message:"no session"})
+export const checkLogin = async (req, res) => {
+    try {
+        const token = req.cookies.token;
+        if (!token)
+            return res.json({ login: false, error: true, message: "no token" });
+        const verifiedJWT = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await userModel.findById(verifiedJWT.id, { password: 0 });
+        if (!user) {
+            return res.json({ login: false, message:"invalid user" });
         }
-        let user = await userModel.findOne({_id:req.session.user.id});
-        if(!user){
-            return res.json({login:false, message:"no user found"})
-        }
-        return res.json({login:true, message:"Success"})
-    }catch(err){
+        return res.json({ user, login: true, token });
+    } catch (err) {
         console.log(err)
-        res.json({err:true, message:"something went wrong"})
+        res.json({ login: false, error: err });
     }
 }
