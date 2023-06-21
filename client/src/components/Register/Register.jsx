@@ -4,11 +4,16 @@ import {
   MDBInput,
   MDBCheckbox,
   MDBBtn,
-  MDBIcon
+  MDBIcon,
+  MDBNavbar,
+  MDBRow,
+  MDBCol,
+  MDBNavbarBrand
 }
 from 'mdb-react-ui-kit';
 import {Link} from 'react-router-dom'
 import axios from 'axios';
+import icon from '../../images/lock.png'
 
 export default function Register({setRefresh}) {
     const [email,setEmail]= useState("")
@@ -26,6 +31,27 @@ export default function Register({setRefresh}) {
       }
     }
   return (
+    <>
+    <MDBNavbar light bgColor='light' className='position-sticky sticky-top'>
+        <MDBContainer>
+          <MDBContainer fluid className='p-0'>
+            <MDBRow>
+              <MDBCol>
+                <MDBNavbarBrand href='#'>
+                  <img
+                    src={icon}
+                    height='30'
+                    alt=''
+                    loading='lazy'
+                  />
+                  <b style={{ fontSize: "1rem", marginLeft: "5px" }}>PassGen</b>
+                </MDBNavbarBrand>
+              </MDBCol>
+            </MDBRow>
+
+          </MDBContainer>
+        </MDBContainer>
+      </MDBNavbar>
     <div className='d-flex justify-content-center align-items-center h-100 pt-5 mt-5' style={{height:"100vh"}} >
 
     <MDBContainer className="p-3 my-5 d-flex flex-column h-50" style={{width:"500px", maxWidth:"95%"}}>
@@ -47,7 +73,7 @@ export default function Register({setRefresh}) {
           </div>
         }
 
-      <MDBBtn className="mb-4" color='danger' size='lg' onClick={handleSubmit}>Sign Up</MDBBtn>
+      <MDBBtn className="mb-4" color='danger'  disabled={password=="" || email=="" || name==""} size='lg' onClick={handleSubmit}>Sign Up</MDBBtn>
 
       <div className="text-center">
         <p>Already a member? <Link to="/login" className='text-danger'>Login</Link></p>
@@ -55,6 +81,8 @@ export default function Register({setRefresh}) {
 
     </MDBContainer>
     </div>
+    </>
+
 
   );
 }

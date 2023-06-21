@@ -24,7 +24,7 @@ export async function register(req, res){
         return res.cookie("token", token, {
             httpOnly: true,
             secure: true,
-            maxAge: 1000 * 60 * 10,
+            maxAge: 1000 * 60 * 5,
             sameSite: "none",
         }).json({err:false, message:"Success"})
     }catch(err){
@@ -54,7 +54,7 @@ export async function login(req, res){
         return res.cookie("token", token, {
             httpOnly: true,
             secure: true,
-            maxAge: 1000 * 60 * 10,
+            maxAge: 1000 * 60 * 5,
             sameSite: "none",
         }).json({err:false, message:"Success"})
     }catch(err){

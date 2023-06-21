@@ -16,11 +16,18 @@ import Header from '../Header/Header';
 import AddPasswordModal from '../../modal/AddPasswordModal'
 import GeneratePasswordModal from '../../modal/GeneratePasswordModal';
 import axios from 'axios';
+import copyToClipboard from '../../helper/copyToClipboard';
+import Swal from 'sweetalert2';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
+
 
 
 export default function Home({ user, setRefresh, refresh }) {
     const [showAddModal, setShowAddModal] = useState(false)
     const [list, setList] = useState([])
+    const [open, setOpen] = useState(false)
     const [showGenerateModal, setShowGenerateModal] = useState(false)
     useEffect(() => {
         getData()
@@ -31,25 +38,59 @@ export default function Home({ user, setRefresh, refresh }) {
         if (!data.err) {
             setList(data.passwords)
         }
+    }
+    async function deletePassword(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#DC4C64',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                const { data } = await axios.patch("/password/", { id });
+                if (!data.err) {
+                    Swal.fire(
+                        {
+                            title: 'Success',
+                            text: "Password deleted successfull.",
+                            icon: 'success',
+                            confirmButtonColor: '#DC4C64'
+                        }
+                    )
+                } else {
+                    Swal.fire(
+                        {
+                            title: 'Failed!',
+                            text: "Password deletion failed",
+                            icon: 'error',
+                            confirmButtonColor: '#DC4C64'
+                        }
+                    )
+                }
+                setRefresh(!refresh)
+            }
+        })
 
     }
     return (
         <>
             <Header setRefresh={setRefresh}></Header>
-            <MDBContainer className='mt-5'>
-                <MDBRow className='mt-3'>
-                    <h5>Home</h5>
-                </MDBRow>
-                <MDBRow className='mt-1'>
+            <MDBContainer className=''>
+                <MDBRow className=''>
+                
                     <MDBContainer fluid>
                         <MDBRow>
                             <MDBCol md={6}>
-                                <MDBBtn className='w-100 mt-2' color="danger" outline rounded style={{ height: "50px" }} onClick={() => setShowGenerateModal(true)} >
+                                <MDBBtn className='w-100 mt-2' color="danger" outline style={{ height: "50px" }} onClick={() => setShowGenerateModal(true)} >
                                     Generate Password
                                 </MDBBtn>
                             </MDBCol>
                             <MDBCol md={6}>
-                                <MDBBtn className='w-100 mt-2' color='danger' rounded style={{ height: "50px" }} onClick={() => setShowAddModal(true)} >
+                                <MDBBtn className='w-100 mt-2' color='danger' style={{ height: "50px" }} onClick={() => setShowAddModal(true)} >
                                     Add password
                                 </MDBBtn>
                             </MDBCol>
@@ -79,12 +120,12 @@ export default function Home({ user, setRefresh, refresh }) {
                                             </div>
                                         </MDBCardBody>
                                         <MDBCardFooter background='light' border='0' className='p-2 d-flex justify-content-around'>
-                                            <MDBBtn color='link' rippleColor='primary' className='text-reset m-0' >
-                                                Edit
-                                                <MDBIcon fas icon='pen' className='ms-3' />
+                                            <MDBBtn color='link' rippleColor='primary' className='text-reset w-100' onClick={() => deletePassword(item._id)} >
+                                                delete
+                                                <MDBIcon fas icon='trash' className='ms-3' />
                                             </MDBBtn>
-                                            <MDBBtn color='link' rippleColor='primary' className='text-reset m-0'>
-                                                Copy <MDBIcon fas icon='clipboard' className='ms-3' />
+                                            <MDBBtn color='link' rippleColor='primary' onClick={() => {copyToClipboard(item.password); setOpen(true)}} className='text-reset m-0 w-100 text-danger'>
+                                                Copy password <MDBIcon fas icon='clipboard' className='ms-3' />
                                             </MDBBtn>
                                         </MDBCardFooter>
                                     </MDBCard>
@@ -95,10 +136,20 @@ export default function Home({ user, setRefresh, refresh }) {
                     }
                 </MDBRow>
             </MDBContainer>
-            <AddPasswordModal setRefresh={setRefresh} open={showAddModal} setOpen={setShowAddModal} />
-            <GeneratePasswordModal open={showGenerateModal} setOpen={setShowGenerateModal} />
+            <Snackbar open={open} anchorOrigin={{ vertical:"bottom", horizontal:"center" }} autoHideDuration={2000} onClose={()=>{setOpen(false)}}>
+                <Alert onClose={()=>{setOpen(false)}}  sx={{ width: '100%' }}>
+                    Text copied successfully
+                </Alert>
+            </Snackbar>
+
+            <AddPasswordModal setRefresh={setRefresh} setCopyOpen={setOpen} open={showAddModal} setOpen={setShowAddModal} />
+            <GeneratePasswordModal setCopyOpen={setOpen} open={showGenerateModal} setOpen={setShowGenerateModal} />
         </>
 
 
     );
 }
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });

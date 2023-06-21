@@ -5,7 +5,7 @@ import cors from 'cors'
 import path from 'path'
 import { checkLogin, login, logout, register } from './controllers/authController.js'
 import cookieParser from 'cookie-parser'
-import { addPassword, getPasswords } from './controllers/passwordController.js'
+import { addPassword, deletePassword, getPasswords } from './controllers/passwordController.js'
 import verifyUser from './middleware/verifyUser.js'
 const app = express()
 
@@ -32,6 +32,7 @@ app.get("/logout/", logout)
 app.post("/register", register)
 app.post("/password/add",verifyUser, addPassword)
 app.get("/passwords",verifyUser, getPasswords)
+app.patch("/password",verifyUser, deletePassword)
 
 
 app.listen(4000, ()=>{

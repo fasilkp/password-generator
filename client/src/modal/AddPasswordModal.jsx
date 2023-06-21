@@ -18,7 +18,7 @@ import copyToClipboard from '../helper/copyToClipboard';
 import axios from 'axios';
 import Swal from 'sweetalert2'
 
-export default function AddPasswordModal({ open, setOpen, setRefresh }) {
+export default function AddPasswordModal({ open, setOpen, setRefresh, setCopyOpen }) {
     const toggleShow = () => setOpen(!open);
     const [password, setPassword] = useState('')
     const [appName, setAppName] = useState("")
@@ -48,11 +48,14 @@ export default function AddPasswordModal({ open, setOpen, setRefresh }) {
         console.log(data)
         if (!data.err) {
             Swal.fire(
-                'Good job!',
-                'Password added successfully!',
-                'success'
+                {
+                    title: 'Success',
+                    text: "Password added successfully.",
+                    icon: 'success',
+                    confirmButtonColor: '#DC4C64'
+                }
             )
-            setRefresh(refresh=>!refresh)
+            setRefresh(refresh => !refresh)
             setOpen(false)
         } else {
             setErr(data.message)
@@ -73,8 +76,16 @@ export default function AddPasswordModal({ open, setOpen, setRefresh }) {
                             <MDBRow className='ps-2 pe-2 mt-3'>
                                 <MDBInput label='Generated password' value={password} onChange={(e) => setPassword(e.target.value)} id='form1' type='text' size='lg' />
                             </MDBRow>
-                            <MDBRow className='ps-2 pe-2 mt-3'>
-                                <MDBBtn color='danger' onClick={() => copyToClipboard(password)} outline className='w-95'>Copy Password</MDBBtn>
+                            <MDBRow className='mt-3'>
+                                <div className='d-flex' style={{gap:"10px"}}>
+
+                                    <MDBBtn color='danger' onClick={() => { copyToClipboard(password); setCopyOpen(true) }} outline className='w-100'>Copy Password</MDBBtn>
+                                    <MDBBtn color='danger' className='w-100' onClick={() => setPageReload(!pageReload)}>
+                                        Generate new
+                                    </MDBBtn>
+                                </div>
+                            </MDBRow>
+                            <MDBRow className='mt-3 ps-2 pe-2'>
                             </MDBRow>
                             <MDBRow className='ps-2 pe-2 mt-3'>
                                 <MDBInput label='App name' value={appName} onChange={(e) => setAppName(e.target.value)} id='form1' type='text' size='lg' />
@@ -125,11 +136,7 @@ export default function AddPasswordModal({ open, setOpen, setRefresh }) {
                                     </div>
                                 }
                             </MDBRow>
-                            <MDBRow className='mt-3 ps-2 pe-2'>
-                                <MDBBtn color='danger' className='w-100' onClick={() => setPageReload(!pageReload)} rounded>
-                                    Generate new
-                                </MDBBtn>
-                            </MDBRow>
+
                         </MDBModalBody>
                         <MDBModalFooter>
                             <MDBBtn color='danger' outline onClick={toggleShow} rounded>
