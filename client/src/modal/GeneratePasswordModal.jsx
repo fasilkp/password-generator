@@ -54,12 +54,7 @@ export default function GeneratePasswordModal({ open, setOpen, setCopyOpen }) {
                             <MDBRow className='ps-2 pe-2 mt-3'>
                                 <MDBInput label='Generated password' readOnly value={password} onChange={(e) => setPassword(e.target.value)} id='form1' type='text' size='lg' />
                             </MDBRow>
-                            <MDBRow className='mt-3 ps-2 pe-2'>
-                                <MDBBtn color='danger' outline className='w-100' onClick={() => setRefresh(!refresh)} >
-                                    Generate new
-                                </MDBBtn>
-                            </MDBRow>
-
+                            
                             <MDBRow className='mt-4'>
                                 <div className='d-flex justify-content-between flex-row align-items-center'>
                                     <span>Length</span>
@@ -95,6 +90,12 @@ export default function GeneratePasswordModal({ open, setOpen, setCopyOpen }) {
                                     <MDBSwitch checked={option.symbols} color='danger' onChange={(e) => setoption({ ...option, symbols: e.target.checked })} />
                                 </div>
                             </MDBRow>
+                            <MDBRow className='mt-3 ps-2 pe-2'>
+                                <MDBBtn color='danger' outline className='w-100' onClick={() => setRefresh(!refresh)} >
+                                    Generate new
+                                </MDBBtn>
+                            </MDBRow>
+
 
                         </MDBModalBody>
                         <MDBModalFooter>

@@ -73,17 +73,10 @@ export default function AddPasswordModal({ open, setOpen, setRefresh, setCopyOpe
                             <MDBBtn className='btn-close' color='none' onClick={toggleShow}></MDBBtn>
                         </MDBModalHeader>
                         <MDBModalBody>
-                            <MDBRow className='ps-2 pe-2 mt-3'>
-                                <MDBInput label='Generated password' value={password} onChange={(e) => setPassword(e.target.value)} id='form1' type='text' size='lg' />
-                            </MDBRow>
-                            <MDBRow className='mt-3'>
-                                <div className='d-flex' style={{gap:"10px"}}>
-
-                                    <MDBBtn color='danger' onClick={() => { copyToClipboard(password); setCopyOpen(true) }} outline className='w-100'>Copy Password</MDBBtn>
-                                    <MDBBtn color='danger' className='w-100' onClick={() => setPageReload(!pageReload)}>
-                                        Generate new
-                                    </MDBBtn>
-                                </div>
+                            
+                            <MDBRow className='ps-2 pe-2 mt-3 d-flex'>
+                                <MDBInput label='Generated password' value={password} style={{width:"80%"}} onChange={(e) => setPassword(e.target.value)} id='form1' type='text' size='lg' />
+                                    <MDBBtn color='danger' onClick={() => { copyToClipboard(password); setCopyOpen(true) }} className='w-100'>Copy Password</MDBBtn>
                             </MDBRow>
                             <MDBRow className='mt-3 ps-2 pe-2'>
                             </MDBRow>
@@ -128,6 +121,15 @@ export default function AddPasswordModal({ open, setOpen, setRefresh, setCopyOpe
                                     <MDBSwitch checked={option.symbols} color='danger' onChange={(e) => setoption({ ...option, symbols: e.target.checked })} />
                                 </div>
                             </MDBRow>
+                            <MDBRow className='mt-3'>
+                                <div className='d-flex' style={{gap:"10px"}}>
+
+                                    <MDBBtn color='danger' outline className='w-100' onClick={() => setPageReload(!pageReload)}>
+                                    Generate new
+                                    </MDBBtn>
+                                </div>
+                            </MDBRow>
+                            
                             <MDBRow className='mt-3'>
                                 {
                                     err &&
