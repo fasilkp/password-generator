@@ -75,7 +75,7 @@ export default function AddPasswordModal({ open, setOpen, setRefresh, setCopyOpe
                         <MDBModalBody>
                             
                             <MDBRow className='ps-2 pe-2 mt-3 d-flex'>
-                                <MDBInput label='Generated password' value={password} style={{width:"80%"}} onChange={(e) => setPassword(e.target.value)} id='form1' type='text' size='lg' />
+                                <MDBInput label='Generated password' value={password}  onChange={(e) => setPassword(e.target.value)} id='form1' type='text' size='lg' />
                                     <MDBBtn color='danger' onClick={() => { copyToClipboard(password); setCopyOpen(true) }} className='w-100'>Copy Password</MDBBtn>
                             </MDBRow>
                             <MDBRow className='mt-3 ps-2 pe-2'>
