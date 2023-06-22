@@ -8,7 +8,8 @@ import {
   MDBNavbar,
   MDBRow,
   MDBCol,
-  MDBNavbarBrand
+  MDBNavbarBrand,
+  MDBSpinner
 }
   from 'mdb-react-ui-kit';
 import { Link } from 'react-router-dom'
@@ -20,14 +21,18 @@ function Login({ setRefresh }) {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [err, setErr] = useState("")
+  const [loading, setLoading] = useState(false)
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true)
     let { data } = await axios.post("/login", { email, password });
     if (data.err) {
       setErr(data.message)
     } else {
       setRefresh(refresh => !refresh)
     }
+    setLoading(false)
+
   }
   return (
     <>
@@ -70,7 +75,15 @@ function Login({ setRefresh }) {
               <p className='text-danger'>{err}</p>
             </div>
           }
-          <MDBBtn className="mb-4" disabled={password=="" || email==""} onClick={handleSubmit} color='danger' size='lg'>Sign in</MDBBtn>
+          <MDBBtn className="mb-4" disabled={password == "" || email == ""} onClick={handleSubmit} color='danger' size='lg'>
+            Sign in
+            {
+              loading &&
+              <MDBSpinner role='status' className='ms-2' size='sm'>
+                <span className='visually-hidden'>Loading...</span>
+              </MDBSpinner>
+            }
+          </MDBBtn>
           <div className="text-center">
             <p>Not a member? <Link to="/register" className='text-danger'>Register</Link></p>
           </div>
