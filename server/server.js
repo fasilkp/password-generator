@@ -18,7 +18,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000", 
-      "https://passgen.cyclic.app"
+      "https://passgenfs.netlify.app"
     ],
     credentials: true,
   })
