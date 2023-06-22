@@ -1,6 +1,7 @@
 import userModel from '../models/userModel.js'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import validatePassword from '../helper/validatePassword.js'
 var salt = bcrypt.genSaltSync(10);
 
 export async function register(req, res){
@@ -8,6 +9,10 @@ export async function register(req, res){
         const {email, password, name}= req.body;
         if(!email || !password || !name){
             return res.json({err:true, message:"please input all details"})
+        }
+        const validationPassword = validatePassword(password)
+        if (!validationPassword.status) {
+            return res.json({err:true, message:validationPassword.message[0].message})
         }
         let user = await userModel.findOne({email});
         if(user){

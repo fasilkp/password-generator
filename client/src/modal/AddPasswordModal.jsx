@@ -30,7 +30,7 @@ export default function AddPasswordModal({ open, setOpen, setRefresh, setCopyOpe
         numbers: true,
         symbols: false
     })
-    const [length, setLength] = useState(16)
+    const [length, setLength] = useState(32)
     useEffect(() => {
         try {
             let newPassword = generatePassword(option, length)

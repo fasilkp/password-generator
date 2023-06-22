@@ -105,12 +105,12 @@ export default function Home({ user, setRefresh, refresh }) {
                         list[0] &&
                         list.map((item, index) => {
                             return (
-                                <MDBCol xl={6} className='mb-4'>
+                                <MDBCol xl={6} key={index} className='mb-4'>
                                     <MDBCard>
                                         <MDBCardBody>
                                             <div className='d-flex justify-content-between align-items-center'>
                                                 <div className='d-flex align-items-center'>
-                                                    <img src="https://lh4.googleusercontent.com/zxHGfDuP9OcnUCHnOaV77PUez3jUnliiGJr4GmdExFZxMe5X3nqG9R8qTcBFcknkQ_lxT-rtQS42jXWqWr9E-xMNv50ri-pFg-HdQi_MQ-j75jkYuf5KILd8RdG8SC4zp8FMqJME9_atihTsBujbVdQAj_jwd6I0Tc3XP0stjsW_AHxAuX-OED49xizrBA" alt style={{ height: 65 }} className="rounded-circle" />
+                                                    <img src="https://lh4.googleusercontent.com/zxHGfDuP9OcnUCHnOaV77PUez3jUnliiGJr4GmdExFZxMe5X3nqG9R8qTcBFcknkQ_lxT-rtQS42jXWqWr9E-xMNv50ri-pFg-HdQi_MQ-j75jkYuf5KILd8RdG8SC4zp8FMqJME9_atihTsBujbVdQAj_jwd6I0Tc3XP0stjsW_AHxAuX-OED49xizrBA" style={{ height: 65 }} className="rounded-circle" />
                                                     <div className='ms-3'>
                                                         <p className='fw-bold mb-1'>{item.appName}</p>
                                                         <p className='text-muted mb-0'>{item.userName}</p>

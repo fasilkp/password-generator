@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 function dbConnect(){
-    mongoose.connect("mongodb://127.0.0.1/passGen").then(result=>{
+    mongoose.connect(process.env.MONGO_URL).then(result=>{
         console.log("Database connected")
     }).catch((err)=>{
         console.log("data base error \n"+err)
