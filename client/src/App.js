@@ -6,7 +6,7 @@ import Register from "./components/Register/Register";
 import axios from "axios";
 
 export default function App() {
-  axios.defaults.baseURL = "http://localhost:4000";
+  axios.defaults.baseURL = process.env.REACT_APP_SERVER_URL;
   axios.defaults.withCredentials = true;
   const [user, setUser] = useState({ login: null, details: {} });
   const [refresh, setRefresh] = useState(true);
