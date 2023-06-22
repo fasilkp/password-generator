@@ -26,7 +26,7 @@ app.use(
 
 dbConnect()
 
-
+app.get("/", (req, res)=>res.send("App running"))
 app.post("/login", login)
 app.get("/login/check", checkLogin)
 app.get("/logout/", logout)
