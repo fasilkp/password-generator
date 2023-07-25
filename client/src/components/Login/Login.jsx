@@ -109,6 +109,7 @@ function Login({ setRefresh }) {
           </div>
 
         </MDBContainer>
+        <MDBSpinner style={{visibility:"hidden"}}></MDBSpinner>
       </div>
     </>
 
