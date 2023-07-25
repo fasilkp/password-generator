@@ -14,6 +14,10 @@ export async function addPassword(req, res){
             return res.json({err:true, message:"password already exist"})
         }
         const encyptedPassword =encrypt(password);
+        const passwordPresent = await passwordModel.findOne({'password.encryptedData':encryptePassword.encryptedData});
+        if(passwordPresent){
+            return res.json({err:true, message:"not a unique password"})
+        }
         const newPassword = await passwordModel.create({appName, userName,userId:req.user._id, password:encyptedPassword})
         return res.json({err:false, message:"Success"})
 

@@ -34,6 +34,17 @@ function Login({ setRefresh }) {
     setLoading(false)
 
   }
+  const demoLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true)
+    let { data } = await axios.post("/login", { email:"fasil@gmail.com", password:"123" });
+    if (data.err) {
+      setErr(data.message)
+    } else {
+      setRefresh(refresh => !refresh)
+    }
+    setLoading(false)
+  }
   return (
     <>
       <MDBNavbar light bgColor='light' className='position-sticky sticky-top'>
@@ -77,6 +88,15 @@ function Login({ setRefresh }) {
           }
           <MDBBtn className="mb-4" disabled={password == "" || email == ""} onClick={handleSubmit} color='danger' size='lg'>
             Sign in
+            {
+              loading &&
+              <MDBSpinner role='status' className='ms-2' size='sm'>
+                <span className='visually-hidden'>Loading...</span>
+              </MDBSpinner>
+            }
+          </MDBBtn>
+          <MDBBtn className="mb-4" onClick={demoLogin} outline color='danger' size='lg'>
+            Demo Login
             {
               loading &&
               <MDBSpinner role='status' className='ms-2' size='sm'>
